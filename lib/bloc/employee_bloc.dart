@@ -10,6 +10,7 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
     on<FetchEmployees>(_fetchEmployee);
     on<DeleteEmployee>(_deleteEmployee);
     on<CreateNewEmployee>(_createNewEmployee);
+    on<UpdateEmployee>(_updateEmployee);
   }
 
   void _fetchEmployee(FetchEmployees event, Emitter<EmployeeState> emit) async {
@@ -86,6 +87,32 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
       );
     } catch (e) {
       emit(state.copyWith(status: Status.failed, message: "error deleting $e"));
+    }
+  }
+
+  // update the employee details
+  void _updateEmployee(
+    UpdateEmployee event,
+    Emitter<EmployeeState> emit,
+  ) async {
+    try {
+      final database = await Database.getDataBase();
+      final emp = event.emp;
+      await database!.employeeDao.updateUser(emp);
+      final updatedList = List<Employee>.from(state.employee ?? []);
+      final index = updatedList.indexWhere((item) => item.id == emp.id);
+      if (index != -1) {
+        updatedList[index] = emp;
+      }
+      emit(
+        state.copyWith(
+          status: Status.success,
+          message: "success",
+          employee: updatedList,
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(status: Status.failed, message: "failed"));
     }
   }
 }

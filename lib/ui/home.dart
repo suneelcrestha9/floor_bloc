@@ -5,6 +5,7 @@ import 'package:orm_floor/bloc/employee_event.dart';
 import 'package:orm_floor/bloc/employee_state.dart';
 import 'package:orm_floor/emum/enum.dart';
 import 'package:orm_floor/ui/add_dialog_box.dart';
+import 'package:orm_floor/ui/edit_dialog_box.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -65,30 +66,77 @@ class _HomeState extends State<Home> {
                             padding: const EdgeInsets.all(10),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(item.name),
-                                    Text(item.address),
-                                    Text(item.salary.toString()),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                          "Name : ${item.name}",
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                          "Address : ${item.address}",
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                          "Salary :${item.salary}",
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    context.read<EmployeeBloc>().add(
-                                      DeleteEmployee(id: item.id),
-                                    );
-                                  },
-                                  child: Icon(color: Colors.red, Icons.delete),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    context.read<EmployeeBloc>().add(
-                                      DeleteEmployee(id: item.id),
-                                    );
-                                  },
-                                  child: Icon(color: Colors.red, Icons.delete),
+                                Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        context.read<EmployeeBloc>().add(
+                                          DeleteEmployee(id: item.id),
+                                        );
+                                      },
+                                      child: Icon(
+                                        color: Colors.red,
+                                        Icons.delete,
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    InkWell(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => EditDialogBox(
+                                            id: item.id,
+                                            name: item.name,
+                                            salary: item.salary,
+                                            address: item.address,
+                                          ),
+                                        );
+                                      },
+                                      child: Icon(
+                                        color: Colors.blue,
+                                        Icons.edit,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

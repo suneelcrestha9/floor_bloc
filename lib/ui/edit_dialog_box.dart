@@ -6,7 +6,18 @@ import 'package:orm_floor/bloc/employee_state.dart';
 import 'package:orm_floor/entity/employee.dart';
 
 class EditDialogBox extends StatefulWidget {
-  const EditDialogBox({super.key});
+  final int id;
+  final String name;
+  final String address;
+  final double salary;
+
+  const EditDialogBox({
+    super.key,
+    required this.id,
+    required this.name,
+    required this.address,
+    required this.salary,
+  });
 
   @override
   State<EditDialogBox> createState() => _EditDialogBoxState();
@@ -17,6 +28,15 @@ class _EditDialogBoxState extends State<EditDialogBox> {
   final _nameController = TextEditingController();
   final _addressController = TextEditingController();
   final _salaryController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _nameController.text = widget.name;
+    _addressController.text = widget.address;
+    _salaryController.text = widget.salary.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,17 +77,17 @@ class _EditDialogBoxState extends State<EditDialogBox> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   final Employee emp = Employee(
-                    0,
+                    widget.id,
                     _nameController.text,
                     _addressController.text,
                     double.tryParse(_salaryController.text) ?? 0.0,
                   );
 
-                  context.read<EmployeeBloc>().add(CreateNewEmployee(emp: emp));
+                  context.read<EmployeeBloc>().add(UpdateEmployee(emp: emp));
                   Navigator.pop(context);
                 }
               },
-              child: const Text("Save"),
+              child: const Text("Update"),
             ),
           ],
         );

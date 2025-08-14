@@ -6,6 +6,7 @@ class EmployeeState extends Equatable {
   final Status status;
   final List<Employee>? employee;
   final String message;
+
   const EmployeeState({
     this.status = Status.loading,
     this.employee = const <Employee>[],
